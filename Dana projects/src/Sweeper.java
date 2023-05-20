@@ -11,6 +11,7 @@ import sweeper.Ranges;
 public class Sweeper extends JFrame{
     private Game game;
     private  JPanel panel;
+    private JLabel label;
     private  final int COLS  = 10; //the number of columns in the game
     private  final int ROWS  = 10 ; //the number of ROWS in the game
     private  final int IMG_SIZE = 50;
@@ -27,11 +28,17 @@ public class Sweeper extends JFrame{
         game = new Game(COLS, ROWS, TOTAL);
         game.start();
         setImages();
-        initPanel();
-        initFrame();
+        addLabel();
+        addPanel();
+        addFrame();
     }
 
-    private void initPanel(){
+    private void addLabel(){
+        label = new JLabel("Welcome to MineSweeper!");
+        add (label, BorderLayout.SOUTH);
+    }
+
+    private void addPanel(){
         panel = new JPanel(){
             @Override
             protected void paintComponent(Graphics g) {
@@ -54,6 +61,7 @@ public class Sweeper extends JFrame{
                     game.pressRight(c);
                 if (e.getButton() == MouseEvent.BUTTON2)
                     game.start();
+                label.setText(getMessage());
                 panel.repaint();
             }
         });
@@ -61,13 +69,22 @@ public class Sweeper extends JFrame{
         add (panel);
     }
 
-    private void initFrame(){
-        pack(); // function to resize the form
+    private String getMessage() {
+        switch (game.getState()){
+            case PLAYED: return "Think twice and make a decision!";
+            case BOMBED: return "Game is over!";
+            case WINNER: return "You're a WINNER!";
+            default: return "";
+        }
+    }
+
+    private void addFrame(){
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //close after the window was closed
         setTitle("MineSweeperGame");
-        setLocationRelativeTo(null);// open panel at the center
         setResizable(false);// we can't resize the panel
         setVisible(true);//show panel
+        pack(); // function to resize the form
+        setLocationRelativeTo(null);// open panel at the center
         setIconImage(getImg("icon"));
     }
 
