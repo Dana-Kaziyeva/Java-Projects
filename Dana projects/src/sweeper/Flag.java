@@ -5,9 +5,12 @@ import static sweeper.Box.FLAGED;
 
 class Flag {
     private Matrix flagArr;
+    private int countOfClosed;
 
     void start(){
+
         flagArr = new Matrix(Box.CLOSED);
+        countOfClosed = Ranges.getSize().x * Ranges.getSize().y;
     }
 
     Box get (Coordinates c){
@@ -16,6 +19,7 @@ class Flag {
 
     public void setOpen(Coordinates c) {
         flagArr.set(c, Box.OPENED);
+        countOfClosed --;
     }
 
     void toggleFlag(Coordinates c){
@@ -26,11 +30,40 @@ class Flag {
         }
     }
 
-    public void setClosed(Coordinates c){
+    private void setClosed(Coordinates c){
         flagArr.set(c, CLOSED);
     }
 
-    public void setFlag(Coordinates c){
+    private void setFlag(Coordinates c){
         flagArr.set(c, FLAGED);
+    }
+
+    int getNumOfClosed() {
+        return countOfClosed;
+    }
+
+    void setBombed(Coordinates c) {
+        flagArr.set(c, Box.BOMBED);
+    }
+
+    public void setOpenToClosed(Coordinates a) {
+        if(flagArr.get(a) == CLOSED){
+            flagArr.set(a, Box.OPENED);
+        }
+    }
+
+    public void setNoToFlaggedBox(Coordinates a) {
+        if(flagArr.get(a) == FLAGED){
+            flagArr.set(a, Box.NOBOMB);
+        }
+    }
+
+    int getOpenedToBoxedAroundNum(Coordinates c){
+        int count =0;
+        for (Coordinates a: Ranges.getCoorAround(c)){
+            if(flagArr.get(a) == Box.FLAGED)
+                count++;
+        }
+        return count;
     }
 }
