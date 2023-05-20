@@ -49,4 +49,7 @@ public class Bomb {
         }
     }
 
+    int getTotal() {
+        return totalBomb;
+    }
 }
